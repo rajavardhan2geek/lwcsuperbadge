@@ -1,13 +1,23 @@
 import { LightningElement,wire,track } from 'lwc';
-export default class BoatSearch extends LightningElement {
+import { NavigationMixin } from 'lightning/navigation'
+export default class BoatSearch extends NavigationMixin(LightningElement) {
 
     isLoading = false;
     @track boatList;
     // Handles loading event
-    handleLoading() { }
+    handleLoading(event) { 
+        console.log('sdsd parent');
+        this.isLoading=true;
+      //  this.template.querySelector('c-boat-search-results').refresh();
+
+        
+    }
     
     // Handles done loading event
-    handleDoneLoading() { }
+    handleDoneLoading() {
+
+        this.isLoading=false;
+     }
     
     // Handles search boat event
     // This custom event comes from the form
@@ -15,10 +25,21 @@ export default class BoatSearch extends LightningElement {
         if(event.detail != null){
         console.log('wewe'+event.detail.boatTypeId);
        let boatType=event.detail.boatTypeId;
+       //console.log(this.template.querySelector('c-boat-search-results'));
        this.template.querySelector('c-boat-search-results').searchBoats(boatType);
         }
     }
     
-    createNewBoat() { }
+    createNewBoat() { 
+
+        this[NavigationMixin.Navigate]({
+            type: 'standard__objectPage',
+            attributes: {
+                objectApiName: 'Boat__c',
+                actionName: 'new'
+            }
+        });
+
+    }
 
 }
